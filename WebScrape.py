@@ -10,13 +10,18 @@ class WebScraper:
         department = input("What department would you like faculty data for?\n")
         url = "https://www.shepherd.edu/"+department+"/staff"
         self.csvname = department + "DeptInfo.csv"
-        self.page = req.get(url)
-        self.soup = BSup(self.page.content, "html.parser")
-        if(self.page.url == url):
-            self.scrape()
-        else:
-            print("Department Not Found")
-
+        try:
+            self.page = req.get(url)
+        except:
+            print("Error occurred while getting page, is your internet connected?")
+        try:
+            self.soup = BSup(self.page.content, "html.parser")
+            if(self.page.url == url):
+                self.scrape()
+            else:
+                print("Department Not Found")
+        except:
+            pass
     def scrape(self):
         content = self.soup.find(class_="content")
         staffmembers = content.find_all("div", class_="staff-item")
