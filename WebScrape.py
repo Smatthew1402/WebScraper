@@ -13,7 +13,7 @@ class WebScraper:
         try:
             self.page = req.get(url)
         except:
-            print("Error occurred while getting page, is your internet connected?")
+            print("Error occurred while requesting page, is your internet connected?")
         try:
             self.soup = BSup(self.page.content, "html.parser")
             if(self.page.url == url):
