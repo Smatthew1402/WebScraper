@@ -9,18 +9,21 @@ class WebScraper:
     def __init__(self):
         department = input("What department would you like faculty data for?\n")
         url = "https://www.shepherd.edu/"+department+"/staff"
+        self.csvname = department + "DeptInfo.csv"
         self.page = req.get(url)
         self.soup = BSup(self.page.content, "html.parser")
-        self.scrape()
-
+        if(self.page.url == url):
+            self.scrape()
+        else:
+            print("Department Not Found")
 
     def scrape(self):
         content = self.soup.find(class_="content")
         staffmembers = content.find_all("div", class_="staff-item")
-        csv_data=[]
+        csv_data = []
         headers = ["Name", "Title", "Email", "Phone", "Office", "Bio"]
         for item in staffmembers:
-            memberinfodict = {"Name":item.find('h2').text}
+            memberinfodict = {"Name": item.find('h2').text}
             lines = item.find_all('tr')
             for line in lines:
                 th = line.find('th')
@@ -36,24 +39,20 @@ class WebScraper:
                             memberinfodict[th.text] = td.text.strip()
                 elif th is None:
                     if td is not None:
-                        memberinfodict["Bio"]=td.text.strip()
+                        memberinfodict["Bio"] = td.text.strip()
 
             memberinfo = ['None', 'None', 'None', 'None', 'None', "None"]
-            memberinfo[0] = memberinfodict.get("Name", "None")
-            memberinfo[1] = memberinfodict.get("Title", "None")
-            memberinfo[2] = memberinfodict.get("Email", "None")
-            memberinfo[3] = memberinfodict.get("Phone", "None")
-            memberinfo[4] = memberinfodict.get("Office", "None")
-            memberinfo[5] = memberinfodict.get("Bio", "None")
-
-
-
+            memberinfo[0] = memberinfodict.get("Name", "None Listed")
+            memberinfo[1] = memberinfodict.get("Title", "None Listed")
+            memberinfo[2] = memberinfodict.get("Email", "None Listed")
+            memberinfo[3] = memberinfodict.get("Phone", "None Listed")
+            memberinfo[4] = memberinfodict.get("Office", "None Listed")
+            memberinfo[5] = memberinfodict.get("Bio", "None, Listed")
             csv_data.append(memberinfo)
-        with open('FacultyInfo.csv', 'w', newline='') as fi:
+        with open(self.csvname, 'w', newline='') as fi:
             wr = csv.writer(fi)
             wr.writerow(headers)
             wr.writerows(csv_data)
-
 
 
 if __name__ == '__main__':
