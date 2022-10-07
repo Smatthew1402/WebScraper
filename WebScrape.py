@@ -35,9 +35,11 @@ class WebScraper:
                         else:
                             memberinfodict[th.text] = td.text.strip()
             memberinfo = ['None', 'None', 'None', 'None', 'None']
-            memberinfo[0] = memberinfodict["Name"]
-            memberinfo[1] = memberinfodict["Title"]
-            memberinfo[2] = memberinfodict["Email"]
+            memberinfo[0] = memberinfodict.get("Name", "None")
+            memberinfo[1] = memberinfodict.get("Title", "None")
+            memberinfo[2] = memberinfodict.get("Email", "None")
+            memberinfo[3] = memberinfodict.get("Phone", "None")
+
 
             csv_data.append(memberinfo)
         with open('FacultyInfo.csv', 'w', newline='') as fi:
