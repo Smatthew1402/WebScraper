@@ -21,7 +21,7 @@ class WebScraper:
         content = self.soup.find(class_="content")
         staffmembers = content.find_all("div", class_="staff-item")
         csv_data = []
-        headers = ["Name", "Title", "Email", "Phone", "Office", "Bio"]
+        headers = ["Name", "Title", "Email", "Phone", "Office", "Bio", "Contact For"]
         for item in staffmembers:
             memberinfodict = {"Name": item.find('h2').text}
             lines = item.find_all('tr')
@@ -41,13 +41,15 @@ class WebScraper:
                     if td is not None:
                         memberinfodict["Bio"] = td.text.strip()
 
-            memberinfo = ['None', 'None', 'None', 'None', 'None', "None"]
+            memberinfo = ['None', 'None', 'None', 'None', 'None', "None", "None"]
             memberinfo[0] = memberinfodict.get("Name", "None Listed")
             memberinfo[1] = memberinfodict.get("Title", "None Listed")
             memberinfo[2] = memberinfodict.get("Email", "None Listed")
             memberinfo[3] = memberinfodict.get("Phone", "None Listed")
             memberinfo[4] = memberinfodict.get("Office", "None Listed")
             memberinfo[5] = memberinfodict.get("Bio", "None, Listed")
+            memberinfo[6] = memberinfodict.get("Contact For", "None Listed")
+
             csv_data.append(memberinfo)
         with open(self.csvname, 'w', newline='') as fi:
             wr = csv.writer(fi)
