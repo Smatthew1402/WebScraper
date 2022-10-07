@@ -27,11 +27,17 @@ class WebScraper:
                 td = line.find('td')
                 if th is not None:
                     if td is not None:
-                        memberinfodict[th.text]= td.text
+                        if th.text == "Email":
+                            text = td.text
+                            text = text.strip()
+                            text = text[0:text.index('@')+12]
+                            memberinfodict[th.text] = text
+                        else:
+                            memberinfodict[th.text] = td.text.strip()
             memberinfo = ['None', 'None', 'None', 'None', 'None']
             memberinfo[0] = memberinfodict["Name"]
             memberinfo[1] = memberinfodict["Title"]
-
+            memberinfo[2] = memberinfodict["Email"]
 
             csv_data.append(memberinfo)
         with open('FacultyInfo.csv', 'w', newline='') as fi:
