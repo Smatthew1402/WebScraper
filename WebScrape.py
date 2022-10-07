@@ -1,16 +1,17 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import requests as req
+from bs4 import BeautifulSoup as BSup
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+class WebScraper:
 
+    def __init__(self):
+        department = input("What department would you like faculty data for?\n")
+        url = "https://www.shepherd.edu/"+department+"/staff"
+        self.page = req.get(url)
+        self.soup = BSup(self.page.content, "html.parser")
 
-# Press the green button in the gutter to run the script.
+    def scrape(self):
+        pass
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    ws = WebScraper()
