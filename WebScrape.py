@@ -20,10 +20,19 @@ class WebScraper:
         csv_data=[]
         headers = ["Name", "Title", "Email", "Phone", "Bio"]
         for item in staffmembers:
-            memberinfo = ['None', 'None', 'None', 'None', 'None']
+            memberinfodict = {"Name":item.find('h2').text}
             lines = item.find_all('tr')
-            name = item.find('h2').text
-            memberinfo[0] = name
+            for line in lines:
+                th = line.find('th')
+                td = line.find('td')
+                if th is not None:
+                    if td is not None:
+                        memberinfodict[th.text]= td.text
+            memberinfo = ['None', 'None', 'None', 'None', 'None']
+            memberinfo[0] = memberinfodict["Name"]
+            memberinfo[1] = memberinfodict["Title"]
+
+
             csv_data.append(memberinfo)
         with open('FacultyInfo.csv', 'w', newline='') as fi:
             wr = csv.writer(fi)
