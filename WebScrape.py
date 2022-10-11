@@ -45,6 +45,12 @@ class WebScraper:
         list[6] = dict.get("Contact For", "None Listed")
         return list
 
+    def writecsv(self, headers, data):
+        with open(self.csvname, 'w', newline='') as fi:
+            wr = csv.writer(fi)
+            wr.writerow(headers)
+            wr.writerows(data)
+
     def scrape(self):
         if self.checkvalidity():
             content = self.soup.find(class_="content")
@@ -72,11 +78,8 @@ class WebScraper:
 
                 memberinfo = ['None', 'None', 'None', 'None', 'None', "None", "None"]
                 csv_data.append(self.dicttolist(memberinfodict, memberinfo))
-            with open(self.csvname, 'w', newline='') as fi:
-                wr = csv.writer(fi)
-                wr.writerow(headers)
-                wr.writerows(csv_data)
 
+            self.writecsv(headers, csv_data)
 
 if __name__ == '__main__':
     ws = WebScraper()
