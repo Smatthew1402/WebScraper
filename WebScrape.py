@@ -15,8 +15,7 @@ class WebScraper:
                 self.buildscraper(department)
                 self.scrape()
         except req.exceptions.RequestException as e:
-            print("an error occurred while getting webpage: "+str(e))
-
+            print("an error occurred while getting webpage: " + str(e))
 
     def buildscraper(self, department):
         self.url = "https://www.shepherd.edu/" + department + "/staff"
@@ -24,11 +23,16 @@ class WebScraper:
         self.page = req.get(self.url)
         self.soup = BSup(self.page.content, "html.parser")
 
-
     def userin(self):
-        department = input("What department would you like faculty data for?\n")
-        self.buildscraper(department)
-
+        h = True
+        while h is True:
+            intext = input("type Scrape to scrape a new department, or Exit to close:\n")
+            if (intext == "Scrape"):
+                department = input("What department would you like faculty data for?\n")
+                self.buildscraper(department)
+                self.scrape()
+            elif(intext == "Exit"):
+                h = False
 
     def checkvalidity(self):
         if (self.page.url == self.url):
