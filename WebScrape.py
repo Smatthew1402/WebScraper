@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup as BSup
 
 class WebScraper:
 
-    def __init__(self, department = None):
+    def __init__(self, department=None):
         if department is None:
             self.userin()
             self.scrape()
@@ -35,6 +35,15 @@ class WebScraper:
             print("Department Not Found")
             return False
 
+    def dicttolist(self, dict, list):
+        list[0] = dict.get("Name", "None Listed")
+        list[1] = dict.get("Title", "None Listed")
+        list[2] = dict.get("Email", "None Listed")
+        list[3] = dict.get("Phone", "None Listed")
+        list[4] = dict.get("Office", "None Listed")
+        list[5] = dict.get("Bio", "None, Listed")
+        list[6] = dict.get("Contact For", "None Listed")
+        return list
 
     def scrape(self):
         if self.checkvalidity():
@@ -62,15 +71,7 @@ class WebScraper:
                             memberinfodict["Bio"] = td.text.strip()
 
                 memberinfo = ['None', 'None', 'None', 'None', 'None', "None", "None"]
-                memberinfo[0] = memberinfodict.get("Name", "None Listed")
-                memberinfo[1] = memberinfodict.get("Title", "None Listed")
-                memberinfo[2] = memberinfodict.get("Email", "None Listed")
-                memberinfo[3] = memberinfodict.get("Phone", "None Listed")
-                memberinfo[4] = memberinfodict.get("Office", "None Listed")
-                memberinfo[5] = memberinfodict.get("Bio", "None, Listed")
-                memberinfo[6] = memberinfodict.get("Contact For", "None Listed")
-
-                csv_data.append(memberinfo)
+                csv_data.append(self.dicttolist(memberinfodict, memberinfo))
             with open(self.csvname, 'w', newline='') as fi:
                 wr = csv.writer(fi)
                 wr.writerow(headers)
