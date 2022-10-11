@@ -7,21 +7,23 @@ from bs4 import BeautifulSoup as BSup
 class WebScraper:
 
     def __init__(self, department=None):
-        if department is None:
-            self.userin()
-            self.scrape()
-        else:
-            self.buildscraper(department)
-            self.scrape()
+        try:
+            if department is None:
+                self.userin()
+                self.scrape()
+            else:
+                self.buildscraper(department)
+                self.scrape()
+        except req.exceptions.RequestException as e:
+            print("an error occurred while getting webpage: "+str(e))
+
 
     def buildscraper(self, department):
         self.url = "https://www.shepherd.edu/" + department + "/staff"
         self.csvname = department + "DeptInfo.csv"
-        try:
-            self.page = req.get(self.url)
-            self.soup = BSup(self.page.content, "html.parser")
-        except:
-            print("an error occurred while getting webpage")
+        self.page = req.get(self.url)
+        self.soup = BSup(self.page.content, "html.parser")
+
 
     def userin(self):
         department = input("What department would you like faculty data for?\n")
@@ -78,7 +80,6 @@ class WebScraper:
 
                 memberinfo = ['None', 'None', 'None', 'None', 'None', "None", "None"]
                 csv_data.append(self.dicttolist(memberinfodict, memberinfo))
-
             self.writecsv(headers, csv_data)
 
 if __name__ == '__main__':
